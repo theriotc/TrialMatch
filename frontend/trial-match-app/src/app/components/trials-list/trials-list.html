@@ -1,1 +1,6 @@
 <p>trials-list works!</p>
+<div>
+    <div *ngFor="let trial of trials">
+        <app-trial-detail [nctId]="trial.protocolSection.identificationModule.nctId" [briefTitle]="trial.protocolSection.identificationModule.briefTitle"></app-trial-detail>
+    </div>
+</div>

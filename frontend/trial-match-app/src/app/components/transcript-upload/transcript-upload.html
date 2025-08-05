@@ -1,1 +1,14 @@
-<p>transcript-upload works!</p>
+<div class="transcript-upload">
+    <div class="row">
+        <textarea name="" id="transcript" cols="30" rows="10" placeholder="Paste the patient-doctor transcript here..." [(ngModel)]="transcript"></textarea>
+        <button (click)="onUploadTranscript()">Upload</button>
+
+        <button (click)="onClearTranscript()">Clear</button>
+
+        <button (click)="onSampleTranscript()">Sample</button>
+    </div>
+    <div class="row">
+        <app-medical-data-display [medicalData]="result?.medical_data?.raw || null"></app-medical-data-display>
+        <app-trials-list [trials]="result?.trials?.studies || []"></app-trials-list>
+    </div>
+</div>
