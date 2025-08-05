@@ -81,7 +81,9 @@ def extract_patient_transcript(transcript):
         response_format={"type": "json_object"},
         temperature=0.1
     )
-   
+    print(f"OpenAI Response: {response}")
+    print(f"Response content: {response.choices[0].message.content}")
+
     try:
         # Parse the JSON string into a Python dictionary
         extracted_data = json.loads(response.choices[0].message.content)
@@ -94,27 +96,15 @@ def extract_patient_transcript(transcript):
 def search_clinical_trials(medical_data):
     """Search ClinicalTrials.gov API for relevant trials"""
     try:
-        # Combine normalized intervention_interest, comorbidities, and current_medications into search_terms
-        search_terms = []
-
-        norm = medical_data.get("normalized", {})
-        if norm.get("intervention_interest"):
-            search_terms.append(norm["intervention_interest"])
-        if norm.get("comorbidities"):
-            search_terms.extend(norm["comorbidities"])
-        if norm.get("current_medications"):
-            search_terms.extend(norm["current_medications"])
-
-
+        search_terms = ""
         # Create the search query - combine terms with +
-        if search_terms:
-            search_query = "+".join(search_terms[:4])  # Limit to 4 terms
-        else:
-            search_query = norm.get("primary_condition", "")
-            
+        if medical_data.get("comorbidities"):
+            search_terms = "+".join(medical_data.get("comorbidities")[:2])  # Limit to 2 terms
+
         query_params = {
-            "query.cond": norm.get("primary_condition", ""),
-            "query.term": search_query,
+            "query.cond": medical_data.get("primary_condition", ""),
+            "query.term": search_terms,
+            "query.intr": medical_data.get("intervention_interest", ""),
             "fields": "NCTId,BriefTitle",
             "pageSize": 10,
         }
@@ -132,11 +122,6 @@ def search_clinical_trials(medical_data):
 
         data = response.json()
         print(f"API Response: {data}")
-
-        # The following gave no results because gpt3.5 found CKD was the condition instead of type 2 diabetes.
-        # https://clinicaltrials.gov/api/v2/studies?query.cond=chronic+kidney+disease&query.term=empagliflozin%2Btype+2+diabetes%2Bhypertension%2Bstroke&fields=NCTId%2CBriefTitle&pageSize=10
-        # Need a fall back to swap primary condition and first comorbidity if no results return for clinical trials
-        # https://clinicaltrials.gov/api/v2/studies?query.cond=type+2+diabetes&query.term=empagliflozin%2Btype+2+diabetes%2Bhypertension%2Bstroke&fields=NCTId%2CBriefTitle&pageSize=10
 
         return data
 
@@ -185,9 +170,11 @@ def process_transcript():
         if not medical_data:
             return jsonify({'error': 'Failed to extract medical data'}), 500
 
-        trials = search_clinical_trials(medical_data) 
+        normalized_medical_data = medical_data.get("normalized")
+        trials = search_clinical_trials(normalized_medical_data)
         
-        # might need to swap primary condition and comorbidities if no results return for clinical trials
+        print(f"Trials studies: {trials.get('studies')}")
+        
         # search for clinical trial details
 
         return jsonify({
