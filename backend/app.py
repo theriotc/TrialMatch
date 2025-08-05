@@ -174,14 +174,33 @@ def process_transcript():
         trials = search_clinical_trials(normalized_medical_data)
         
         print(f"Trials studies: {trials.get('studies')}")
-        
-        # search for clinical trial details
 
         return jsonify({
             'medical_data': medical_data,
             'trials': trials,
         })
         
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/trial/<nct_id>', methods=['GET'])
+def get_trial_details(nct_id):
+    """Get details for a specific clinical trial"""
+    try:
+        api_url = f"{CLINICAL_TRIALS_API}/studies/{nct_id}"
+
+        query_params = {
+            "fields": "NCTId,BriefTitle,OverallStatus,StartDate,CompletionDate,StudyType,EnrollmentInfo,Sex,MinimumAge,HasResults"
+        }
+        # add more details on key results here
+
+        print(f"Making API request to: {api_url}")
+        print(f"Query parameters: {query_params}")
+        response = requests.get(api_url, params=query_params)
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            return jsonify({'error': 'Failed to fetch trial details'}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
