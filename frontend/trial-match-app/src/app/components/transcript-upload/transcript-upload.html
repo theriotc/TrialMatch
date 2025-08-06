@@ -11,7 +11,8 @@
   
   <div class="button-section">
     <button (click)="onSampleTranscript()" class="sample-load">
-      Load Sample
+      Load Sample {{ currentSampleIndex() + 1 }}/{{ sampleTranscripts.length }} 
+      <span class="sample-indicator">({{ sampleTranscripts.length }} available)</span>
     </button>
     <button (click)="onClearTranscript()">Clear</button>
     <button (click)="onUploadTranscript()" [disabled]="isLoading()">

@@ -66,6 +66,12 @@ button {
   background-color: #5a6268;
 }
 
+.sample-indicator {
+  font-size: 11px;
+  opacity: 0.8;
+  font-weight: normal;
+}
+
 button:nth-child(2) {
   background-color: #f8f9fa;
   color: #6c757d;
