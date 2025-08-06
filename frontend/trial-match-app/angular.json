@@ -18,6 +18,7 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/trial-match-app/browser",
             "assets": [
               {
                 "glob": "**/*",
@@ -28,7 +29,7 @@
               "src/styles.css"
             ],
             "server": "src/main.server.ts",
-            "outputMode": "server",
+            "outputMode": "static",
             "ssr": {
               "entry": "src/server.ts"
             }
