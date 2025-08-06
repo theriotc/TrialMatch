@@ -5,6 +5,7 @@ import os
 import requests
 from dotenv import load_dotenv
 from openai import OpenAI
+import time
 
 # Load environment variables from .env file
 load_dotenv()
@@ -165,6 +166,20 @@ def openai_status():
 def process_transcript():
     """Process patient transcript"""
     try:
+        # Simple rate limiting - 10 requests per minute
+        if not hasattr(process_transcript, 'last_request'):
+            process_transcript.last_request = 0
+            process_transcript.request_count = 0
+        
+        current_time = time.time()
+        if current_time - process_transcript.last_request < 60:  # 1 minute window
+            process_transcript.request_count += 1
+            if process_transcript.request_count > 10:  # 10 requests per minute
+                return jsonify({'error': 'Rate limit exceeded. Please try again in a minute.'}), 429
+        else:
+            process_transcript.last_request = current_time
+            process_transcript.request_count = 1
+        
         data = request.get_json()
         transcript = data.get('transcript', '')
         
