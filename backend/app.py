@@ -26,6 +26,9 @@ def extract_patient_transcript(transcript):
     prompt = f"""
     Analyze the following patient-doctor conversation transcript and extract key medical information in JSON format.
 
+    If the transcript is blank, contains only whitespace, or does not clearly resemble a patient-doctor conversation with symptoms, diagnoses, or medications, RETURN: empty JSON object
+     - DO NOT HALLUCINATE, DO NOT GENERATE SAMPLE DATA
+
     Step 1: Identify the PROVIDER'S FINAL ASSESSMENT or DIAGNOSIS section (often labeled "Assessment" or "Plan").
     Step 2: Use the first diagnosis in the assessment as primary_condition. 
     - Only use the presenting symptom as primary_condition if NO diagnosis is present.
@@ -35,13 +38,15 @@ def extract_patient_transcript(transcript):
     {{
         "raw": {{
             "age": <integer>,   // Patient age in years
-            "sex": "<male|female|unknown>",
+            "sex": "<male|female>", // If not stated, use null
             "primary_condition": "<main diagnosis or symptom as stated>",
             "comorbidities": [ "<as stated>", ... ],
             "current_medications": [ "<full med & dose as stated>", ... ],
             "intervention_interest": "<full drug/treatment as stated, if any>"
         }},
         "normalized": {{
+            "age": <integer>,   // Patient age in years
+            "sex": "<male|female>", // If not stated, use null
             "primary_condition": "<standardized clinical term>",
             "comorbidities": [ "<standard clinical term>", ... ],
             "current_medications": [ "<generic drug names>", ... ],
@@ -106,7 +111,7 @@ def search_clinical_trials(medical_data):
             "query.term": search_terms,
             "query.intr": medical_data.get("intervention_interest", ""),
             "fields": "NCTId,BriefTitle",
-            "pageSize": 10,
+            "pageSize": 5,
         }
 
         api_url = f"{CLINICAL_TRIALS_API}/studies"
