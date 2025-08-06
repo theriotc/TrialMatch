@@ -10,7 +10,9 @@
   </div>
   
   <div class="button-section">
-    <button (click)="onSampleTranscript()">Load Sample</button>
+    <button (click)="onSampleTranscript()" class="sample-load">
+      Load Sample
+    </button>
     <button (click)="onClearTranscript()">Clear</button>
     <button (click)="onUploadTranscript()" [disabled]="isLoading()">
       {{ isLoading() ? 'Processing...' : 'Submit Transcript' }}

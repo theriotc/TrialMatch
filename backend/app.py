@@ -42,7 +42,7 @@ def extract_patient_transcript(transcript):
         }},
         "normalized": {{
             "age": <integer>,   // Patient age in years
-            "sex": "<male|female>", // If not stated, use null
+            "sex": "<male|female|null>",
             "primary_condition": "<standardized clinical term>",
             "comorbidities": [ "<standard clinical term>", ... ],
             "current_medications": [ "<generic drug names>", ... ],
@@ -67,7 +67,12 @@ def extract_patient_transcript(transcript):
         - "Glucophage 1000mg" to "metformin"
         - "Cozaar 100mg" to "losartan"
 
-    3. General:
+    3. **Sex**
+    - If stated, use "male" or "female".
+    - If Mr., Mrs., Ms., use the gender of the person.
+    - If not stated, use null.
+
+    4. General:
     - If a field is missing, use null or an empty list.
     - Output valid JSON only. No explanations.
 
@@ -313,4 +318,4 @@ def summarize_trial_results(primary_outcomes):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(debug=False, host='0.0.0.0', port=port) 
+    app.run(debug=True, host='0.0.0.0', port=port) 
