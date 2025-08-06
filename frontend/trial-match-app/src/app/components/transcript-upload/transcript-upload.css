@@ -144,10 +144,21 @@ h4 {
   
   .results-grid {
     flex-direction: column;
+    gap: 15px;
   }
   
   .medical-data,
   .trials {
     min-width: 100%;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .container {
+    padding: 15px;
+  }
+  
+  .results {
+    margin-top: 20px;
   }
 }
