@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, signal } from '@ang
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TrialDetail as TrialDetailInterface } from '../../shared/interfaces';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-trial-detail',
@@ -40,7 +41,7 @@ export class TrialDetail implements OnInit, OnChanges {
     this.trialDetail.set(null);
     this.trialResultsSummary.set(null);
 
-    this.http.get<TrialDetailInterface>(`/api/trial/${nctId}`)
+    this.http.get<TrialDetailInterface>(`${environment.apiUrl}/api/trial/${nctId}`)
       .subscribe({
         next: (res) => {
           console.log('Trial detail response:', res);
@@ -62,7 +63,7 @@ export class TrialDetail implements OnInit, OnChanges {
   fetchTrialResults(nctId: string) {
     this.isLoadingResults.set(true);
     
-    this.http.get(`/api/results/${nctId}`, { responseType: 'text' })
+    this.http.get(`${environment.apiUrl}/api/results/${nctId}`, { responseType: 'text' })
       .subscribe({
         next: (res) => {
           console.log('Trial results response:', res);

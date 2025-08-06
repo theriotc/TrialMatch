@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { TrialsList } from '../trials-list/trials-list';
 import { MedicalDataDisplay } from '../medical-data-display/medical-data-display';
 import { ProcessingResult, MedicalData, ClinicalTrial } from '../../shared/interfaces';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-transcript-upload',
@@ -65,7 +66,7 @@ Doctor: Follow up in 3 months for labs and to check for side effects.`;
     this.errorMessage.set('');
     this.result.set(null);
 
-    this.http.post<ProcessingResult>('/api/process-transcript', { 
+    this.http.post<ProcessingResult>(`${environment.apiUrl}/api/process-transcript`, { 
       transcript: this.transcript 
     }).subscribe({
       next: (res) => {
