@@ -282,9 +282,16 @@ def extract_primary_outcomes(data):
 
 def summarize_trial_results(primary_outcomes):
     """Summarize trial results"""
-    prompt = f"""
-    Analyze the following primary outcomes and summarize the results in a concise manner.
-    only return 2 lines of text.
+    prompt = f"""Analyze the following clinical trial primary outcomes and summarize the results in 2 lines. 
+
+    Instructions:
+    1. Always report numerical values for the intervention and control groups.
+    2. Clearly state the change or difference relative to the control group.
+    3. Focus on clinically meaningful measures (mortality, adverse events, blood clots, etc.).
+    4. If multiple doses exist, summarize the **largest effect vs control**.
+    5. Output exactly 2 sentences, one for each outcome.
+
+    Data:
     {primary_outcomes}
     """
     response = client.chat.completions.create(

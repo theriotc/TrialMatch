@@ -4,8 +4,15 @@
   padding: 20px;
 }
 
+.container > h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #333;
+}
+
 .input-section {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 textarea {
@@ -17,6 +24,7 @@ textarea {
   font-family: Arial, sans-serif;
   font-size: 14px;
   resize: vertical;
+  box-sizing: border-box;
 }
 
 textarea:focus {
@@ -29,6 +37,9 @@ textarea:focus {
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 button {
@@ -39,12 +50,16 @@ button {
   font-size: 13px;
   font-weight: 500;
   transition: all 0.2s ease;
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 button:first-child {
   background-color: #6c757d;
   color: white;
-  min-width: 90px;
 }
 
 button:first-child:hover {
@@ -55,7 +70,6 @@ button:nth-child(2) {
   background-color: #f8f9fa;
   color: #6c757d;
   border: 1px solid #dee2e6;
-  min-width: 80px;
 }
 
 button:nth-child(2):hover {
@@ -67,7 +81,6 @@ button:nth-child(2):hover {
 button:last-child {
   background-color: #007bff;
   color: white;
-  min-width: 140px;
   font-weight: 600;
   padding: 12px 20px;
 }
@@ -98,20 +111,43 @@ button:disabled {
 
 .results-grid {
   display: flex;
-  gap: 30px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .medical-data {
-  flex: 0 0 30%;
-  min-width: 0;
+  flex: 1;
+  min-width: 300px;
 }
 
 .trials {
-  flex: 0 0 70%;
-  min-width: 0;
+  flex: 2;
+  min-width: 300px;
 }
 
 h4 {
-  color: #555;
+  margin-top: 0;
   margin-bottom: 15px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .button-section {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  button {
+    width: 100%;
+    flex: none;
+  }
+  
+  .results-grid {
+    flex-direction: column;
+  }
+  
+  .medical-data,
+  .trials {
+    min-width: 100%;
+  }
 }

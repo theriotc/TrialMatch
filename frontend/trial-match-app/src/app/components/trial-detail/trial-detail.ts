@@ -20,22 +20,28 @@ export class TrialDetail implements OnInit, OnChanges {
   error = signal<string | null>(null);
   isLoading = signal(false);
   isLoadingResults = signal(false);
+  private lastNctId: string | null = null;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    if (this.nctId) {
+    if (this.nctId && this.nctId !== this.lastNctId) {
       this.fetchTrialDetail(this.nctId);
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['nctId'] && changes['nctId'].currentValue) {
+    if (changes['nctId'] && changes['nctId'].currentValue && changes['nctId'].currentValue !== this.lastNctId) {
       this.fetchTrialDetail(changes['nctId'].currentValue);
     }
   }
 
   fetchTrialDetail(nctId: string) {
+    if (nctId === this.lastNctId) {
+      return;
+    }
+    
+    this.lastNctId = nctId;
     this.isLoading.set(true);
     this.error.set(null);
     this.trialDetail.set(null);
