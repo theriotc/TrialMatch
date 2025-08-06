@@ -75,7 +75,8 @@ Doctor: Follow up in 3 months for labs and to check for side effects.`;
       },
       error: (error) => {
         console.error('Error processing transcript:', error);
-        this.errorMessage.set('Error processing transcript. Please try again.');
+        const errorMsg = error.error?.error || error.message || 'Error processing transcript. Please try again.';
+        this.errorMessage.set(errorMsg);
         this.isLoading.set(false);
       }
     });
