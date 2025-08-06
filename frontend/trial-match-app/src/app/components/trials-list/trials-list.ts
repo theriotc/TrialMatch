@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClinicalTrial } from '../transcript-upload/transcript-upload';
+import { ClinicalTrial } from '../../shared/interfaces';
 import { TrialDetail } from '../trial-detail/trial-detail';
 
 @Component({

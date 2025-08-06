@@ -1,36 +1,7 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-
-export interface TrialDetail {
-  hasResults: boolean;
-  protocolSection: {
-    designModule: {
-      enrollmentInfo: {
-        count: number;
-        type: string;
-      };
-      studyType: string;
-    };
-    eligibilityModule: {
-      minimumAge: string;
-      sex: string;
-    };
-    identificationModule: {
-      briefTitle: string;
-      nctId: string;
-    };
-    statusModule: {
-      completionDateStruct: {
-        date: string;
-      };
-      overallStatus: string;
-      startDateStruct: {
-        date: string;
-      };
-    };
-  };
-}
+import { TrialDetail as TrialDetailInterface } from '../../shared/interfaces';
 
 @Component({
   selector: 'app-trial-detail',
@@ -43,14 +14,13 @@ export class TrialDetail implements OnInit, OnChanges {
   @Input() nctId: string | null = null;
   @Input() briefTitle: string | null = null;
   
-  trialDetail = signal<TrialDetail | null>(null);
+  trialDetail = signal<TrialDetailInterface | null>(null);
   error = signal<string | null>(null);
   isLoading = signal(false);
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    // Initial fetch if nctId is already set
     if (this.nctId) {
       this.fetchTrialDetail(this.nctId);
     }
@@ -67,7 +37,7 @@ export class TrialDetail implements OnInit, OnChanges {
     this.error.set(null);
     this.trialDetail.set(null);
 
-    this.http.get<TrialDetail>(`http://localhost:5000/api/trial/${nctId}`)
+    this.http.get<TrialDetailInterface>(`http://localhost:5000/api/trial/${nctId}`)
       .subscribe({
         next: (res) => {
           console.log('Trial detail response:', res);

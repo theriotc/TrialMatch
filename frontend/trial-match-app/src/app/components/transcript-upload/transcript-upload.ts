@@ -4,34 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TrialsList } from '../trials-list/trials-list';
 import { MedicalDataDisplay } from '../medical-data-display/medical-data-display';
-
-export interface ProcessingResult {
-  medical_data: {
-    normalized: MedicalData;
-    raw: MedicalData;
-  };
-  trials: {
-    studies?: ClinicalTrial[] | null;
-  };
-}
-
-export interface MedicalData {
-  age: number;
-  comorbidities: string[];
-  current_medications: string[];
-  intervention_interest: string;
-  primary_condition: string;
-  sex: string;
-}
-
-export interface ClinicalTrial {
-  protocolSection:{
-    identificationModule:{
-      briefTitle: string;
-      nctId: string;
-    }
-  }
-}
+import { ProcessingResult, MedicalData, ClinicalTrial } from '../../shared/interfaces';
 
 @Component({
   selector: 'app-transcript-upload',

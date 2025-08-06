@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MedicalData } from '../transcript-upload/transcript-upload';
+import { MedicalData } from '../../shared/interfaces';
 
 @Component({
   selector: 'app-medical-data-display',
