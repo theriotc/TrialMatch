@@ -1,7 +1,9 @@
 <div class="trial-card">
   <div class="trial-header">
     <h5>{{briefTitle}}</h5>
-    <span class="nct-id">{{nctId}}</span>
+    <div class="trial-meta">
+      <span class="nct-id">{{nctId}}</span>
+    </div>
   </div>
   
   <div *ngIf="isLoading()" class="loading">
@@ -13,25 +15,40 @@
   </div>
   
   <div *ngIf="!isLoading() && trialDetail()" class="trial-info">
-    <div class="info-row">
-      <span class="label">Status:</span>
-      <span class="value">{{trialDetail()?.protocolSection?.statusModule?.overallStatus}}</span>
+    <div class="info-grid">
+      <div class="info-column">
+        <div class="info-row">
+          <span class="label">Status:</span>
+          <span class="value">{{trialDetail()?.protocolSection?.statusModule?.overallStatus}}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Type:</span>
+          <span class="value">{{trialDetail()?.protocolSection?.designModule?.studyType}}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Enrollment:</span>
+          <span class="value">{{trialDetail()?.protocolSection?.designModule?.enrollmentInfo?.count}}</span>
+        </div>
+      </div>
+      <div class="info-column">
+        <div class="info-row">
+          <span class="label">Age:</span>
+          <span class="value">{{trialDetail()?.protocolSection?.eligibilityModule?.minimumAge}}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Sex:</span>
+          <span class="value">{{trialDetail()?.protocolSection?.eligibilityModule?.sex}}</span>
+        </div>
+      </div>
     </div>
-    <div class="info-row">
-      <span class="label">Type:</span>
-      <span class="value">{{trialDetail()?.protocolSection?.designModule?.studyType}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Enrollment:</span>
-      <span class="value">{{trialDetail()?.protocolSection?.designModule?.enrollmentInfo?.count}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Age:</span>
-      <span class="value">{{trialDetail()?.protocolSection?.eligibilityModule?.minimumAge}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Sex:</span>
-      <span class="value">{{trialDetail()?.protocolSection?.eligibilityModule?.sex}}</span>
+    <div class="trial-link-container">
+      <a 
+        *ngIf="nctId" 
+        [href]="'https://clinicaltrials.gov/study/' + nctId" 
+        target="_blank" 
+        class="trial-link">
+        View Details
+      </a>
     </div>
   </div>
 </div>

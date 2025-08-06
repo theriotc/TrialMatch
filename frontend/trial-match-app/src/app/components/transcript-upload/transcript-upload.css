@@ -4,11 +4,6 @@
   padding: 20px;
 }
 
-h2 {
-  color: #333;
-  margin-bottom: 20px;
-}
-
 .input-section {
   margin-bottom: 20px;
 }
@@ -31,26 +26,61 @@ textarea:focus {
 
 .button-section {
   margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 button {
-  margin-right: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+  padding: 10px 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-button:hover {
+button:first-child {
+  background-color: #6c757d;
+  color: white;
+  min-width: 90px;
+}
+
+button:first-child:hover {
+  background-color: #5a6268;
+}
+
+button:nth-child(2) {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  min-width: 80px;
+}
+
+button:nth-child(2):hover {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+button:last-child {
+  background-color: #007bff;
+  color: white;
+  min-width: 140px;
+  font-weight: 600;
+  padding: 12px 20px;
+}
+
+button:last-child:hover {
   background-color: #0056b3;
 }
 
 button:disabled {
-  background-color: #6c757d;
+  background-color: #e9ecef;
+  color: #6c757d;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .error {
@@ -66,22 +96,22 @@ button:disabled {
   margin-top: 30px;
 }
 
-.results h3 {
-  color: #333;
-  margin-bottom: 20px;
-}
-
 .results-grid {
   display: flex;
   gap: 30px;
 }
 
-.medical-data, .trials {
-  flex: 1;
+.medical-data {
+  flex: 0 0 30%;
   min-width: 0;
 }
 
-.medical-data h4, .trials h4 {
+.trials {
+  flex: 0 0 70%;
+  min-width: 0;
+}
+
+h4 {
   color: #555;
   margin-bottom: 15px;
 }

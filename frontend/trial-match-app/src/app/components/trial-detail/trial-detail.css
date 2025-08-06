@@ -17,6 +17,13 @@
   line-height: 1.2;
 }
 
+.trial-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .nct-id {
   font-size: 11px;
   color: #666;
@@ -37,6 +44,19 @@
   font-size: 12px;
 }
 
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .info-row {
   display: flex;
   margin-bottom: 4px;
@@ -55,4 +75,26 @@
 
 .value {
   color: #333;
+}
+
+.trial-link-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.trial-link {
+  font-size: 11px;
+  color: #007bff;
+  text-decoration: none;
+  padding: 2px 6px;
+  border: 1px solid #007bff;
+  border-radius: 3px;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.trial-link:hover {
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
 }

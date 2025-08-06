@@ -1,0 +1,30 @@
+.app-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.title-bar {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 0;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.title-bar h1 {
+  margin: 0 0 2px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.title-bar p {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.main-content {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
