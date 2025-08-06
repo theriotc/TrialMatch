@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
 })
 export class TranscriptUpload {
   result = signal<ProcessingResult | null>(null);
-  transcript = ''; // Has to be a regular property for ngModel to work
+  transcript = '';
   isLoading = signal(false);
   errorMessage = signal('');
   

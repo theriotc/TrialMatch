@@ -7,19 +7,14 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import time
 
-# Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
-# Get OpenAI API key from environment variable
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-
-# Initialize OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
-# ClinicalTrials.gov API base URL
 CLINICAL_TRIALS_API = "https://clinicaltrials.gov/api/v2"
 
 def extract_patient_transcript(transcript):
@@ -79,7 +74,6 @@ def extract_patient_transcript(transcript):
     Transcript:
     {transcript}
     """
-    # maybe include lab results? creatinine 1.35 egfr 58% etc
     
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -91,7 +85,6 @@ def extract_patient_transcript(transcript):
     print(f"Response content: {response.choices[0].message.content}")
 
     try:
-        # Parse the JSON string into a Python dictionary
         extracted_data = json.loads(response.choices[0].message.content)
         return extracted_data
     except json.JSONDecodeError as e:
@@ -103,9 +96,8 @@ def search_clinical_trials(medical_data):
     """Search ClinicalTrials.gov API for relevant trials"""
     try:
         search_terms = ""
-        # Create the search query - combine terms with +
         if medical_data.get("comorbidities"):
-            search_terms = "+".join(medical_data.get("comorbidities")[:2])  # Limit to 2 terms
+            search_terms = "+".join(medical_data.get("comorbidities")[:2])
 
         query_params = {
             "query.cond": medical_data.get("primary_condition", ""),
@@ -166,15 +158,15 @@ def openai_status():
 def process_transcript():
     """Process patient transcript"""
     try:
-        # Simple rate limiting - 10 requests per minute
+        # Rate limiting - 10 requests per minute
         if not hasattr(process_transcript, 'last_request'):
             process_transcript.last_request = 0
             process_transcript.request_count = 0
         
         current_time = time.time()
-        if current_time - process_transcript.last_request < 60:  # 1 minute window
+        if current_time - process_transcript.last_request < 60:
             process_transcript.request_count += 1
-            if process_transcript.request_count > 10:  # 10 requests per minute
+            if process_transcript.request_count > 10:
                 return jsonify({'error': 'Rate limit exceeded. Please try again in a minute.'}), 429
         else:
             process_transcript.last_request = current_time
@@ -212,7 +204,6 @@ def get_trial_details(nct_id):
         query_params = {
             "fields": "NCTId,BriefTitle,OverallStatus,StartDate,CompletionDate,StudyType,EnrollmentInfo,Sex,MinimumAge,HasResults"
         }
-        # add more details on key results here
 
         print(f"Making API request to: {api_url}")
         print(f"Query parameters: {query_params}")
@@ -252,44 +243,41 @@ def get_trial_results(nct_id):
         return jsonify({'error': str(e)}), 500
 
 def extract_primary_outcomes(data):
-            """Extract and summarize primary outcome measures from trial results data."""
-            outcome_measures = data.get("resultsSection", {}) \
-                                .get("outcomeMeasuresModule", {}) \
-                                .get("outcomeMeasures", [])
-            primary_outcomes = []
+    """Extract and summarize primary outcome measures from trial results data."""
+    outcome_measures = data.get("resultsSection", {}) \
+                        .get("outcomeMeasuresModule", {}) \
+                        .get("outcomeMeasures", [])
+    primary_outcomes = []
 
-            for outcome in outcome_measures:
-                if outcome.get("type") != "PRIMARY":
-                    continue  # Only keep primary outcomes
+    for outcome in outcome_measures:
+        if outcome.get("type") != "PRIMARY":
+            continue
 
-                # Collect measurement values (flattened for each group)
-                measurements_list = []
-                for outcome_class in outcome.get("classes", []):
-                    for category in outcome_class.get("categories", []):
-                        for i, measurement in enumerate(category.get("measurements", [])):
-                            # Map each measurement to the corresponding group title if possible
-                            group_title = (
-                                outcome["groups"][i]["title"]
-                                if "groups" in outcome and i < len(outcome["groups"])
-                                else f"Group {i+1}"
-                            )
-                            measurements_list.append({
-                                "group": group_title,
-                                "value": measurement.get("value"),
-                                "lower_limit": measurement.get("lowerLimit"),
-                                "upper_limit": measurement.get("upperLimit")
-                            })
+        measurements_list = []
+        for outcome_class in outcome.get("classes", []):
+            for category in outcome_class.get("categories", []):
+                for i, measurement in enumerate(category.get("measurements", [])):
+                    group_title = (
+                        outcome["groups"][i]["title"]
+                        if "groups" in outcome and i < len(outcome["groups"])
+                        else f"Group {i+1}"
+                    )
+                    measurements_list.append({
+                        "group": group_title,
+                        "value": measurement.get("value"),
+                        "lower_limit": measurement.get("lowerLimit"),
+                        "upper_limit": measurement.get("upperLimit")
+                    })
 
-                # Build the concise summary object
-                primary_outcomes.append({
-                    "title": outcome.get("title"),
-                    "time_frame": outcome.get("timeFrame"),
-                    "param_type": outcome.get("paramType"),
-                    "unit": outcome.get("unitOfMeasure"),
-                    "measurements": measurements_list
-                })
+        primary_outcomes.append({
+            "title": outcome.get("title"),
+            "time_frame": outcome.get("timeFrame"),
+            "param_type": outcome.get("paramType"),
+            "unit": outcome.get("unitOfMeasure"),
+            "measurements": measurements_list
+        })
 
-            return primary_outcomes[:2] # return first 2 outcomes
+    return primary_outcomes[:2]
 
 
 def summarize_trial_results(primary_outcomes):
@@ -318,4 +306,4 @@ def summarize_trial_results(primary_outcomes):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port) 
+    app.run(debug=False, host='0.0.0.0', port=port) 
