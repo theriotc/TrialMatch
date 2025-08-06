@@ -65,7 +65,7 @@ Doctor: Follow up in 3 months for labs and to check for side effects.`;
     this.errorMessage.set('');
     this.result.set(null);
 
-    this.http.post<ProcessingResult>('http://localhost:5000/api/process-transcript', { 
+    this.http.post<ProcessingResult>('/api/process-transcript', { 
       transcript: this.transcript 
     }).subscribe({
       next: (res) => {

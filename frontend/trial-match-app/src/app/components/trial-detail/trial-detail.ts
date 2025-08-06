@@ -40,7 +40,7 @@ export class TrialDetail implements OnInit, OnChanges {
     this.trialDetail.set(null);
     this.trialResultsSummary.set(null);
 
-    this.http.get<TrialDetailInterface>(`http://localhost:5000/api/trial/${nctId}`)
+    this.http.get<TrialDetailInterface>(`/api/trial/${nctId}`)
       .subscribe({
         next: (res) => {
           console.log('Trial detail response:', res);
@@ -62,7 +62,7 @@ export class TrialDetail implements OnInit, OnChanges {
   fetchTrialResults(nctId: string) {
     this.isLoadingResults.set(true);
     
-    this.http.get(`http://localhost:5000/api/results/${nctId}`, { responseType: 'text' })
+    this.http.get(`/api/results/${nctId}`, { responseType: 'text' })
       .subscribe({
         next: (res) => {
           console.log('Trial results response:', res);
