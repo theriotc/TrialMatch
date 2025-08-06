@@ -1,33 +1,37 @@
-<div>
+<div class="container">
   <h2>Upload Medical Transcript</h2>
   
-  <div>
-    <textarea name="transcript" id="transcript" cols="50" rows="15" placeholder="Paste the patient-doctor transcript here..." [(ngModel)]="transcript"></textarea>
+  <div class="input-section">
+    <textarea 
+      name="transcript" 
+      id="transcript" 
+      placeholder="Paste the patient-doctor transcript here..." 
+      [(ngModel)]="transcript"></textarea>
   </div>
   
-  <div>
-    <button (click)="onUploadTranscript()" [disabled]="isLoading()">
-      {{ isLoading() ? 'Processing...' : 'Find Clinical Trials' }}
-    </button>
-    <button (click)="onClearTranscript()">Clear</button>
+  <div class="button-section">
     <button (click)="onSampleTranscript()">Load Sample</button>
+    <button (click)="onClearTranscript()">Clear</button>
+    <button (click)="onUploadTranscript()" [disabled]="isLoading()">
+      {{ isLoading() ? 'Processing...' : 'Submit Transcript' }}
+    </button>
   </div>
 
-  <div *ngIf="errorMessage()">
-    Error: {{ errorMessage() }}
+  <div *ngIf="errorMessage()" class="error">
+    {{ errorMessage() }}
   </div>
 
-  <div *ngIf="result()">
-    <h3>Results</h3>
-    
-    <div>
-      <h4>Medical Data</h4>
-      <app-medical-data-display [medicalData]="result()?.medical_data?.raw || null"></app-medical-data-display>
-    </div>
-    
-    <div>
-      <h4>Clinical Trials</h4>
-      <app-trials-list [trials]="result()?.trials?.studies || []"></app-trials-list>
+  <div *ngIf="result()" class="results">
+    <div class="results-grid">
+      <div class="medical-data">
+        <h4>Patient Data</h4>
+        <app-medical-data-display [medicalData]="result()?.medical_data?.raw || null"></app-medical-data-display>
+      </div>
+      
+      <div class="trials">
+        <h4>Clinical Trials</h4>
+        <app-trials-list [trials]="result()?.trials?.studies || []"></app-trials-list>
+      </div>
     </div>
   </div>
 </div>

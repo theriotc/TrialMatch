@@ -1,0 +1,65 @@
+.medical-data-container {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.section-title {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.no-data {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.data-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.data-section {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.section-header {
+  margin: 0 0 8px 0;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.data-content {
+  margin-left: 8px;
+}
+
+.data-item {
+  margin: 4px 0;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.data-list {
+  margin: 4px 0;
+  padding-left: 20px;
+}
+
+.list-item {
+  margin: 2px 0;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.4;
+}

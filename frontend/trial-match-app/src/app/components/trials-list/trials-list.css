@@ -1,0 +1,27 @@
+.trials-container {
+  margin: 10px 0;
+}
+
+h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.no-trials {
+  color: #666;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.trial-item {
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.trial-item h4 {
+  color: #555;
+  margin-bottom: 10px;
+}

@@ -1,23 +1,37 @@
-<div>
-  <h4>{{briefTitle}}</h4>
-  <p>NCT ID: {{nctId}}</p>
-  
-  <div *ngIf="isLoading()">
-    <p>Loading trial details...</p>
+<div class="trial-card">
+  <div class="trial-header">
+    <h5>{{briefTitle}}</h5>
+    <span class="nct-id">{{nctId}}</span>
   </div>
   
-  <div *ngIf="error()">
-    <p>Error: {{error()}}</p>
+  <div *ngIf="isLoading()" class="loading">
+    Loading...
   </div>
   
-  <div *ngIf="!isLoading() && trialDetail()">
-    <p>Status: {{trialDetail()?.protocolSection?.statusModule?.overallStatus}}</p>
-    <p>Study Type: {{trialDetail()?.protocolSection?.designModule?.studyType}}</p>
-    <p>Enrollment: {{trialDetail()?.protocolSection?.designModule?.enrollmentInfo?.count}} participants</p>
-    <p>Start Date: {{trialDetail()?.protocolSection?.statusModule?.startDateStruct?.date}}</p>
-    <p>Completion Date: {{trialDetail()?.protocolSection?.statusModule?.completionDateStruct?.date}}</p>
-    <p>Minimum Age: {{trialDetail()?.protocolSection?.eligibilityModule?.minimumAge}}</p>
-    <p>Sex: {{trialDetail()?.protocolSection?.eligibilityModule?.sex}}</p>
-    <p>Has Results: {{trialDetail()?.hasResults ? 'Yes' : 'No'}}</p>
+  <div *ngIf="error()" class="error">
+    {{error()}}
+  </div>
+  
+  <div *ngIf="!isLoading() && trialDetail()" class="trial-info">
+    <div class="info-row">
+      <span class="label">Status:</span>
+      <span class="value">{{trialDetail()?.protocolSection?.statusModule?.overallStatus}}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Type:</span>
+      <span class="value">{{trialDetail()?.protocolSection?.designModule?.studyType}}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Enrollment:</span>
+      <span class="value">{{trialDetail()?.protocolSection?.designModule?.enrollmentInfo?.count}}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Age:</span>
+      <span class="value">{{trialDetail()?.protocolSection?.eligibilityModule?.minimumAge}}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Sex:</span>
+      <span class="value">{{trialDetail()?.protocolSection?.eligibilityModule?.sex}}</span>
+    </div>
   </div>
 </div>

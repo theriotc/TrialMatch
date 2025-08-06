@@ -1,9 +1,9 @@
-<div>
-  <div *ngIf="trials.length === 0">
-    <p>No clinical trials found matching the criteria.</p>
+<div class="trials-container">  
+  <div *ngIf="trials.length === 0" class="no-trials">
+    No trials found.
   </div>
   
-  <div *ngFor="let trial of trials">
+  <div *ngFor="let trial of trials" class="trial-item">
     <app-trial-detail 
       [nctId]="trial.protocolSection.identificationModule.nctId" 
       [briefTitle]="trial.protocolSection.identificationModule.briefTitle">
