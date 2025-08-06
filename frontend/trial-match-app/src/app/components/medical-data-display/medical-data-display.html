@@ -1,2 +1,39 @@
-<p>medical-data-display works!</p>
-{{medicalData | json}}
+<div>
+  <h3>Patient Data</h3>
+  
+  <div *ngIf="!medicalData">
+    <p>No medical data available.</p>
+  </div>
+  
+  <div *ngIf="medicalData">
+    <div *ngIf="medicalData.age || medicalData.sex">
+      <h4>Demographics</h4>
+      <p *ngIf="medicalData.age">Age: {{medicalData.age}}</p>
+      <p *ngIf="medicalData.sex">Sex: {{medicalData.sex}}</p>
+    </div>
+    
+    <div *ngIf="medicalData.primary_condition">
+      <h4>Primary Diagnosis</h4>
+      <p>{{medicalData.primary_condition}}</p>
+    </div>
+    
+    <div *ngIf="medicalData.comorbidities && medicalData.comorbidities.length > 0">
+      <h4>Symptoms</h4>
+      <ul>
+        <li *ngFor="let condition of medicalData.comorbidities">{{condition}}</li>
+      </ul>
+    </div>
+    
+    <div *ngIf="medicalData.current_medications && medicalData.current_medications.length > 0">
+      <h4>Current Medications</h4>
+      <ul>
+        <li *ngFor="let medication of medicalData.current_medications">{{medication}}</li>
+      </ul>
+    </div>
+    
+    <div *ngIf="medicalData.intervention_interest">
+      <h4>Intervention</h4>
+      <p>{{medicalData.intervention_interest}}</p>
+    </div>
+  </div>
+</div>

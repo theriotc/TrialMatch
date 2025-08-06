@@ -1,5 +1,12 @@
 <div>
-    <div *ngFor="let trial of trials">
-        <app-trial-detail [nctId]="trial.protocolSection.identificationModule.nctId" [briefTitle]="trial.protocolSection.identificationModule.briefTitle"></app-trial-detail>
-    </div>
+  <div *ngIf="trials.length === 0">
+    <p>No clinical trials found matching the criteria.</p>
+  </div>
+  
+  <div *ngFor="let trial of trials">
+    <app-trial-detail 
+      [nctId]="trial.protocolSection.identificationModule.nctId" 
+      [briefTitle]="trial.protocolSection.identificationModule.briefTitle">
+    </app-trial-detail>
+  </div>
 </div>

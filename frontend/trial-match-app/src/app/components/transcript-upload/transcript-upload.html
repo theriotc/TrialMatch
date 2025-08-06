@@ -1,21 +1,33 @@
-<div class="transcript-upload">
-    <div class="row">
-        <textarea name="" id="transcript" cols="30" rows="10" placeholder="Paste the patient-doctor transcript here..." [(ngModel)]="transcript"></textarea>
-        <button (click)="onUploadTranscript()" [disabled]="isLoading()">
-            {{ isLoading() ? 'Processing...' : 'Upload' }}
-        </button>
+<div>
+  <h2>Upload Medical Transcript</h2>
+  
+  <div>
+    <textarea name="transcript" id="transcript" cols="50" rows="15" placeholder="Paste the patient-doctor transcript here..." [(ngModel)]="transcript"></textarea>
+  </div>
+  
+  <div>
+    <button (click)="onUploadTranscript()" [disabled]="isLoading()">
+      {{ isLoading() ? 'Processing...' : 'Find Clinical Trials' }}
+    </button>
+    <button (click)="onClearTranscript()">Clear</button>
+    <button (click)="onSampleTranscript()">Load Sample</button>
+  </div>
 
-        <button (click)="onClearTranscript()">Clear</button>
+  <div *ngIf="errorMessage()">
+    Error: {{ errorMessage() }}
+  </div>
 
-        <button (click)="onSampleTranscript()">Sample</button>
+  <div *ngIf="result()">
+    <h3>Results</h3>
+    
+    <div>
+      <h4>Medical Data</h4>
+      <app-medical-data-display [medicalData]="result()?.medical_data?.raw || null"></app-medical-data-display>
     </div>
-
-    <div *ngIf="errorMessage()" class="error-message">
-        {{ errorMessage() }}
+    
+    <div>
+      <h4>Clinical Trials</h4>
+      <app-trials-list [trials]="result()?.trials?.studies || []"></app-trials-list>
     </div>
-
-    <div class="row" *ngIf="result()">
-        <app-medical-data-display [medicalData]="result()?.medical_data?.raw || null"></app-medical-data-display>
-        <app-trials-list [trials]="result()?.trials?.studies || []"></app-trials-list>
-    </div>
+  </div>
 </div>

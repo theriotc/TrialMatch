@@ -1,6 +1,23 @@
-{{nctId}}
-briefTitle: {{briefTitle}}
-<div *ngIf="!isLoading() && trialDetail()">trialDetail: {{trialDetail() | json}}</div>
-<div *ngIf="isLoading()">Loading trial details...</div>
-<div *ngIf="error()">Error: {{error()}}</div>
-
+<div>
+  <h4>{{briefTitle}}</h4>
+  <p>NCT ID: {{nctId}}</p>
+  
+  <div *ngIf="isLoading()">
+    <p>Loading trial details...</p>
+  </div>
+  
+  <div *ngIf="error()">
+    <p>Error: {{error()}}</p>
+  </div>
+  
+  <div *ngIf="!isLoading() && trialDetail()">
+    <p>Status: {{trialDetail()?.protocolSection?.statusModule?.overallStatus}}</p>
+    <p>Study Type: {{trialDetail()?.protocolSection?.designModule?.studyType}}</p>
+    <p>Enrollment: {{trialDetail()?.protocolSection?.designModule?.enrollmentInfo?.count}} participants</p>
+    <p>Start Date: {{trialDetail()?.protocolSection?.statusModule?.startDateStruct?.date}}</p>
+    <p>Completion Date: {{trialDetail()?.protocolSection?.statusModule?.completionDateStruct?.date}}</p>
+    <p>Minimum Age: {{trialDetail()?.protocolSection?.eligibilityModule?.minimumAge}}</p>
+    <p>Sex: {{trialDetail()?.protocolSection?.eligibilityModule?.sex}}</p>
+    <p>Has Results: {{trialDetail()?.hasResults ? 'Yes' : 'No'}}</p>
+  </div>
+</div>
