@@ -77,6 +77,44 @@
   color: #333;
 }
 
+.results-section {
+  margin: 12px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #007bff;
+}
+
+.results-section h6 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #333;
+  font-weight: 600;
+}
+
+.loading-results {
+  font-size: 11px;
+  color: #666;
+  font-style: italic;
+}
+
+.results-content {
+  margin-top: 6px;
+}
+
+.results-summary {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #333;
+}
+
+.no-results {
+  font-size: 11px;
+  color: #666;
+  font-style: italic;
+}
+
 .trial-link-container {
   display: flex;
   justify-content: flex-end;

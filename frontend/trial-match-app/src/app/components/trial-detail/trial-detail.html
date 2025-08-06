@@ -41,6 +41,20 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="trialDetail()?.hasResults" class="results-section">
+      <h6>Results Summary</h6>
+      <div *ngIf="isLoadingResults()" class="loading-results">
+        Loading results...
+      </div>
+      <div *ngIf="!isLoadingResults() && trialResultsSummary()" class="results-content">
+        <p class="results-summary">{{trialResultsSummary()}}</p>
+      </div>
+      <div *ngIf="!isLoadingResults() && !trialResultsSummary()" class="no-results">
+        No results summary available.
+      </div>
+    </div>
+    
     <div class="trial-link-container">
       <a 
         *ngIf="nctId" 

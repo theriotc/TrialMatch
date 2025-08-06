@@ -111,7 +111,7 @@ def search_clinical_trials(medical_data):
             "query.term": search_terms,
             "query.intr": medical_data.get("intervention_interest", ""),
             "fields": "NCTId,BriefTitle",
-            "pageSize": 5,
+            "pageSize": 10,
         }
 
         api_url = f"{CLINICAL_TRIALS_API}/studies"
@@ -208,6 +208,98 @@ def get_trial_details(nct_id):
             return jsonify({'error': 'Failed to fetch trial details'}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/results/<nct_id>', methods=['GET'])
+def get_trial_results(nct_id):
+    """Get results for a specific clinical trial"""
+    try:
+        api_url = f"{CLINICAL_TRIALS_API}/studies/{nct_id}"
+
+        query_params = {
+            "fields": "resultsSection.outcomeMeasuresModule.outcomeMeasures.title,resultsSection.outcomeMeasuresModule.outcomeMeasures.type,resultsSection.outcomeMeasuresModule.outcomeMeasures.timeFrame,resultsSection.outcomeMeasuresModule.outcomeMeasures.paramType,resultsSection.outcomeMeasuresModule.outcomeMeasures.unitOfMeasure,resultsSection.outcomeMeasuresModule.outcomeMeasures.groups.title,resultsSection.outcomeMeasuresModule.outcomeMeasures.classes.categories.measurements.value"
+        }
+
+        print(f"Making API request to: {api_url}")
+        print(f"Query parameters: {query_params}")
+        response = requests.get(api_url, params=query_params)
+        data = response.json()
+
+        primary_outcomes = extract_primary_outcomes(data)
+        print(f"Primary outcomes: {primary_outcomes}")
+        summary = summarize_trial_results(primary_outcomes)
+        print(f"Summary: {summary}")
+
+        if response.status_code == 200:
+            return summary
+        else:
+            return jsonify({'error': 'Failed to fetch trial results'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+def extract_primary_outcomes(data):
+            """Extract and summarize primary outcome measures from trial results data."""
+            outcome_measures = data.get("resultsSection", {}) \
+                                .get("outcomeMeasuresModule", {}) \
+                                .get("outcomeMeasures", [])
+            primary_outcomes = []
+
+            for outcome in outcome_measures:
+                if outcome.get("type") != "PRIMARY":
+                    continue  # Only keep primary outcomes
+
+                # Collect measurement values (flattened for each group)
+                measurements_list = []
+                for outcome_class in outcome.get("classes", []):
+                    for category in outcome_class.get("categories", []):
+                        for i, measurement in enumerate(category.get("measurements", [])):
+                            # Map each measurement to the corresponding group title if possible
+                            group_title = (
+                                outcome["groups"][i]["title"]
+                                if "groups" in outcome and i < len(outcome["groups"])
+                                else f"Group {i+1}"
+                            )
+                            measurements_list.append({
+                                "group": group_title,
+                                "value": measurement.get("value"),
+                                "lower_limit": measurement.get("lowerLimit"),
+                                "upper_limit": measurement.get("upperLimit")
+                            })
+
+                # Build the concise summary object
+                primary_outcomes.append({
+                    "title": outcome.get("title"),
+                    "time_frame": outcome.get("timeFrame"),
+                    "param_type": outcome.get("paramType"),
+                    "unit": outcome.get("unitOfMeasure"),
+                    "measurements": measurements_list
+                })
+
+            return primary_outcomes[:2] # return first 2 outcomes
+
+
+def summarize_trial_results(primary_outcomes):
+    """Summarize trial results"""
+    prompt = f"""
+    Analyze the following primary outcomes and summarize the results in a concise manner.
+    only return 2 lines of text.
+    {primary_outcomes}
+    """
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        response_format={"type": "text"},
+        temperature=0.1
+    )
+    print(f"OpenAI Response: {response}")
+    print(f"Response content: {response.choices[0].message.content}")
+
+    try:
+        extracted_data = response.choices[0].message.content
+        return extracted_data
+    except json.JSONDecodeError as e:
+        print(f"JSON Parsing Error: {e}")
+        print(f"Raw response: {response.choices[0].message.content}")
+        return None
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

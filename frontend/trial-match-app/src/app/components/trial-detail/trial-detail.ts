@@ -15,8 +15,10 @@ export class TrialDetail implements OnInit, OnChanges {
   @Input() briefTitle: string | null = null;
   
   trialDetail = signal<TrialDetailInterface | null>(null);
+  trialResultsSummary = signal<string | null>(null);
   error = signal<string | null>(null);
   isLoading = signal(false);
+  isLoadingResults = signal(false);
 
   constructor(private http: HttpClient) {}
 
@@ -36,6 +38,7 @@ export class TrialDetail implements OnInit, OnChanges {
     this.isLoading.set(true);
     this.error.set(null);
     this.trialDetail.set(null);
+    this.trialResultsSummary.set(null);
 
     this.http.get<TrialDetailInterface>(`http://localhost:5000/api/trial/${nctId}`)
       .subscribe({
@@ -43,11 +46,32 @@ export class TrialDetail implements OnInit, OnChanges {
           console.log('Trial detail response:', res);
           this.trialDetail.set(res);
           this.isLoading.set(false);
+          
+          if (res.hasResults) {
+            this.fetchTrialResults(nctId);
+          }
         },
         error: (error) => {
           console.error('Error fetching trial detail:', error);
           this.error.set('Failed to load trial details');
           this.isLoading.set(false);
+        }
+      });
+  }
+
+  fetchTrialResults(nctId: string) {
+    this.isLoadingResults.set(true);
+    
+    this.http.get(`http://localhost:5000/api/results/${nctId}`, { responseType: 'text' })
+      .subscribe({
+        next: (res) => {
+          console.log('Trial results response:', res);
+          this.trialResultsSummary.set(res);
+          this.isLoadingResults.set(false);
+        },
+        error: (error) => {
+          console.error('Error fetching trial results:', error);
+          this.isLoadingResults.set(false);
         }
       });
   }
