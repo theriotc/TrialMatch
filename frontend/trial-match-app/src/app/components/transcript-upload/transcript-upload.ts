@@ -41,8 +41,11 @@ export interface ClinicalTrial {
   styleUrl: './transcript-upload.css'
 })
 export class TranscriptUpload {
-  result: ProcessingResult | null = null;
-  transcript = '';
+  result = signal<ProcessingResult | null>(null);
+  transcript = ''; // Has to be a regular property for ngModel to work
+  isLoading = signal(false);
+  errorMessage = signal('');
+  
   sampleTranscript = `Doctor: Hello Ms. Johnson, thanks for coming in today. How are you feeling?
 
 Patient: I'm okay, doctor. I've noticed I've been more thirsty than usual and peeing at night more frequently.
@@ -75,13 +78,33 @@ Doctor: Follow up in 3 months for labs and to check for side effects.`;
 
   onClearTranscript(){
     this.transcript = '';
+    this.result.set(null);
+    this.errorMessage.set('');
   }
 
   onUploadTranscript(){
-    this.http.post<ProcessingResult>('http://localhost:5000/api/process-transcript', { transcript: this.transcript })
-      .subscribe((res: any) => {
+    if (!this.transcript) {
+      this.errorMessage.set('Please enter a transcript first.');
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    this.result.set(null);
+
+    this.http.post<ProcessingResult>('http://localhost:5000/api/process-transcript', { 
+      transcript: this.transcript 
+    }).subscribe({
+      next: (res) => {
         console.log(res);
-        this.result = res;
+        this.result.set(res);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error processing transcript:', error);
+        this.errorMessage.set('Error processing transcript. Please try again.');
+        this.isLoading.set(false);
+      }
     });
   }
 }

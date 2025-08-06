@@ -1,3 +1,6 @@
-<p>trial-detail works!</p>
 {{nctId}}
 briefTitle: {{briefTitle}}
+<div *ngIf="!isLoading() && trialDetail()">trialDetail: {{trialDetail() | json}}</div>
+<div *ngIf="isLoading()">Loading trial details...</div>
+<div *ngIf="error()">Error: {{error()}}</div>
+

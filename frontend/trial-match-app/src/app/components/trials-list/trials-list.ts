@@ -5,6 +5,7 @@ import { TrialDetail } from '../trial-detail/trial-detail';
 
 @Component({
   selector: 'app-trials-list',
+  standalone: true,
   imports: [CommonModule, TrialDetail],
   templateUrl: './trials-list.html',
   styleUrl: './trials-list.css'
