@@ -2,7 +2,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 12px;
-  background-color: white;
+  background: white;
   margin-bottom: 10px;
   width: 100%;
   box-sizing: border-box;
@@ -92,7 +92,7 @@
 .results-section {
   margin: 12px 0;
   padding: 10px;
-  background-color: #f8f9fa;
+  background: #f8f9fa;
   border-radius: 4px;
   border-left: 3px solid #007bff;
 }
@@ -140,12 +140,12 @@
   padding: 2px 6px;
   border: 1px solid #007bff;
   border-radius: 3px;
-  background-color: #f8f9fa;
+  background: #f8f9fa;
   transition: all 0.2s ease;
 }
 
 .trial-link:hover {
-  background-color: #007bff;
+  background: #007bff;
   color: white;
   text-decoration: none;
 }
