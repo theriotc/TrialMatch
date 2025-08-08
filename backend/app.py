@@ -81,7 +81,7 @@ def extract_patient_transcript(transcript):
     """
     
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-5-nano",
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"},
         temperature=0.1
@@ -300,7 +300,7 @@ def summarize_trial_results(primary_outcomes):
     {primary_outcomes}
     """
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-5-nano",
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "text"},
         temperature=0.1
